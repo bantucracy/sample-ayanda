@@ -46,7 +46,6 @@ public class MyClient {
         }
     }
 
-
     public OkHttpClient getHTTPClient() {
         return mClient;
     }
@@ -146,7 +145,6 @@ public class MyClient {
             else if (mimeType.startsWith("audio"))
                 fileExt = "m4a";
         }
-
         return fileExt;
     }
 
@@ -159,5 +157,4 @@ public class MyClient {
         }
         return sbUrl.toString();
     }
-
 }

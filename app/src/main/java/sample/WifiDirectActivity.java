@@ -48,6 +48,7 @@ public class WifiDirectActivity extends AppCompatActivity {
     private List peers = new ArrayList();
     private List peerNames = new ArrayList();
     private ArrayAdapter<String> peersAdapter = null;
+    private int defualtPort = 8080;
 
     private Button btnWdShareFile;
     private Button btnWdDiscover;
@@ -91,53 +92,33 @@ public class WifiDirectActivity extends AppCompatActivity {
 
             @Override
             public void onConnectedAsServer(Server server) {
-            
+                try {
+                    a.setServer(new MyServer(WifiDirectActivity.this, defualtPort));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onConnectedAsClient(final InetAddress groupOwnerAddress) {
+                // This is essentially polling,
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         MyClient client = new MyClient(WifiDirectActivity.this);
                         try {
-
-                                final String response = client
-                                    .get(groupOwnerAddress.getHostAddress() + ":" + Integer.toString(8080));
-                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(WifiDirectActivity.this, response, Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-
-                        } catch (IOException e) {
-                           e.printStackTrace();
-                        }
-
-                        try {
                             final File file = client.getFile(groupOwnerAddress.getHostAddress() + ":" + Integer.toString(8080));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
-
                         if (nearbyMedia != null) {
-
                            client.uploadFile(groupOwnerAddress.getHostAddress() + ":" + Integer.toString(8080), nearbyMedia);
+                           nearbyMedia = null;
                         }
                     }
                 }).start();
-
             }
         });
-        try {
-            int defualtPort = 8080;
-            a.setServer(new MyServer(this, defualtPort));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void createView() {
@@ -188,28 +169,21 @@ public class WifiDirectActivity extends AppCompatActivity {
             // Load the selected image into a preview
             ImageView ivPreview = (ImageView) findViewById(R.id.ivPreviewWD);
             ivPreview.setImageBitmap(selectedImage);
-
             String filePath = getRealPathFromURI(photoUri);
-
-
             try {
                 nearbyMedia = new NearbyMedia();
                 nearbyMedia.setMimeType("image/jpeg");
                 nearbyMedia.setTitle("pic");
-
                 nearbyMedia.setFileMedia(new File(filePath));
-
                 //get a JSON reprecation of the metadata we want to share
                 Gson gson = new GsonBuilder()
                         .setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
                 nearbyMedia.mMetadataJson = gson.toJson("key:value");
-
                 a.wdShareFile(nearbyMedia);
             } catch (IOException e) {
                 nearbyMedia = null;
                 e.printStackTrace();
             }
-
         }
     }
 
