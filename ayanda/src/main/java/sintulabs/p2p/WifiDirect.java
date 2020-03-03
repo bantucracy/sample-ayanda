@@ -355,7 +355,7 @@ public class WifiDirect extends P2P {
      */
     @Override
     public Boolean isSupported() {
-        return null;
+        return wiFiP2pEnabled;
     }
 
     /**
@@ -364,6 +364,6 @@ public class WifiDirect extends P2P {
      */
     @Override
     public Boolean isEnabled() {
-        return null;
+        return wiFiP2pEnabled;
     }
 }

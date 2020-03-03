@@ -76,7 +76,7 @@ public class MyServer extends NanoHTTPD implements IServer{
             return NanoHTTPD.newFixedLengthResponse(Response.Status.OK, "text/plain", fileToShare.getMetadataJson());
 
         } else {
-            String msg = "<html><body><h1>Hello server</h1>\n";
+            String msg = "<html><body><h1  >Hello server</h1>\n";
             Map<String, String> parms = session.getParms();
             if (parms.get("username") == null) {
                 msg += "<form action='?' method='get'>\n  <p>Your name: <input type='text' name='username'></p>\n" + "</form>\n";

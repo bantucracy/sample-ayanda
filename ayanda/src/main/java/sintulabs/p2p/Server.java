@@ -27,13 +27,13 @@ public class Server {
     }
 
     public void setFileToShare(NearbyMedia media) {
-       mServer.setFileToShare(media);
-    }
+       mServer.setFileToShare(media);    }
 
     public static Server getInstance() throws IOException {
         if (server == null) {
             throw new IOException("Server not defined");
         }
+
         return server;
     }
 
