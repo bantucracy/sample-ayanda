@@ -1,1 +1,2 @@
 include ':app', ':ayanda'
+project (':ayanda').projectDir = new File('../ayanda')
